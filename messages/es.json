@@ -1,0 +1,169 @@
+{
+    "HomePage": {
+        "title": "MyProjects",
+        "subtitle": "El constructor de portafolios de alta gama para desarrolladores.",
+        "getStarted": "Comenzar"
+    },
+    "Landing": {
+        "login": "Iniciar Sesión",
+        "signup": "Registrarse",
+        "logout": "Cerrar Sesión",
+        "dashboard": "Panel",
+        "badge": "Para desarrolladores",
+        "subtitle": "La plataforma donde los desarrolladores muestran sus mejores proyectos al mundo. Construye tu portafolio profesional y conecta con oportunidades.",
+        "getStarted": "Comenzar ahora",
+        "viewProjects": "Ver proyectos",
+        "stats": {
+            "developers": "Desarrolladores",
+            "projects": "Proyectos",
+            "views": "Visitas"
+        },
+        "carousel": {
+            "title": "Proyectos destacados",
+            "subtitle": "Descubre los proyectos más populares de nuestra comunidad",
+            "empty": "Aún no hay proyectos publicados. ¡Sé el primero!",
+            "viewProject": "Ver proyecto"
+        },
+        "about": {
+            "title": "Tu portafolio profesional en minutos",
+            "description": "MyProjects es la plataforma perfecta para desarrolladores que quieren destacar. Muestra tus proyectos, comparte tu código y construye tu marca personal como developer.",
+            "features": {
+                "showcase": {
+                    "title": "Muestra tu código",
+                    "description": "Presenta tus proyectos con descripciones detalladas, tecnologías utilizadas y enlaces a demos y repositorios."
+                },
+                "organize": {
+                    "title": "Organiza tu trabajo",
+                    "description": "Mantén todos tus proyectos organizados en un solo lugar con un dashboard intuitivo y fácil de usar."
+                },
+                "share": {
+                    "title": "Comparte globalmente",
+                    "description": "Obtén una URL única para tu perfil y compártela con reclutadores, clientes o la comunidad."
+                },
+                "analytics": {
+                    "title": "Analiza tu impacto",
+                    "description": "Conoce cuántas personas ven tus proyectos, likes y estadísticas de engagement."
+                }
+            },
+            "cta": "Únete a cientos de desarrolladores"
+        },
+        "footer": {
+            "madeWith": "Hecho con",
+            "by": "por",
+            "rights": "Todos los derechos reservados."
+        }
+    },
+    "Auth": {
+        "login": "Iniciar Sesión",
+        "signup": "Registrarse",
+        "email": "Correo",
+        "password": "Contraseña",
+        "name": "Nombre",
+        "google": "Continuar con Google"
+    },
+    "Dashboard": {
+        "title": "Panel",
+        "subtitle": "Bienvenido a tu panel.",
+        "projects": "Proyectos",
+        "profile": "Perfil",
+        "analytics": "Analíticas"
+    },
+    "DashboardPreview": {
+        "previewMode": "Vista previa de tu perfil público",
+        "changeBanner": "Cambiar banner",
+        "editProfile": "Editar perfil",
+        "shareProfile": "Compartir perfil",
+        "viewPublic": "Ver público",
+        "noName": "Sin nombre",
+        "noUsernameSet": "Sin usuario configurado",
+        "noBio": "Sin biografía. Agrega una en tu perfil.",
+        "noUsername": "Configura tu nombre de usuario primero",
+        "linkCopied": "¡Enlace copiado!",
+        "copyError": "Error al copiar enlace",
+        "loadError": "Error al cargar datos",
+        "uploadBanner": "Subir banner",
+        "uploadBannerDesc": "Elige una imagen para tu banner. Se recomienda 1500x500px.",
+        "clickToSelect": "Clic para seleccionar imagen",
+        "invalidFileType": "Por favor selecciona una imagen",
+        "fileTooLarge": "La imagen debe ser menor a 10MB",
+        "bannerHint": "Máximo 10MB. Se recomienda proporción 3:1 (ej: 1500x500px)",
+        "bannerUpdated": "Banner actualizado",
+        "uploadError": "Error al subir banner",
+        "cancel": "Cancelar",
+        "uploading": "Subiendo...",
+        "saveBanner": "Guardar banner",
+        "myProjects": "Mis Proyectos",
+        "projectsCount": "{count, plural, =0 {Sin proyectos} =1 {1 proyecto} other {# proyectos}}",
+        "addProject": "Agregar",
+        "noProjects": "Aún no tienes proyectos",
+        "noProjectsDesc": "Agrega tu primer proyecto para que aparezca en tu perfil público y los reclutadores puedan ver tu trabajo.",
+        "addFirstProject": "Agregar mi primer proyecto",
+        "published": "Publicado",
+        "draft": "Borrador",
+        "viewLive": "Ver demo",
+        "viewRepo": "Ver código",
+        "viewProject": "Ver proyecto"
+    },
+    "Profile": {
+        "title": "Perfil",
+        "subtitle": "Edita tu perfil aquí.",
+        "username": "Usuario",
+        "name": "Nombre",
+        "bio": "Biografía",
+        "bioPlaceholder": "Cuéntanos sobre ti",
+        "save": "Guardar cambios",
+        "loading": "Cargando...",
+        "success": "Perfil actualizado",
+        "error": "Error al actualizar perfil",
+        "loadError": "Error al cargar perfil",
+        "basicInfo": "Información Básica",
+        "basicInfoDescription": "Actualiza tu información personal y biografía.",
+        "socialLinks": "Redes Sociales",
+        "socialLinksDescription": "Agrega tus enlaces de redes sociales para que aparezcan en tu perfil público.",
+        "website": "Sitio Web",
+        "customLinks": "Enlaces personalizados",
+        "customLinksDescription": "Agrega hasta {max} enlaces adicionales",
+        "addLink": "Agregar",
+        "linkLabel": "Nombre del enlace",
+        "noCustomLinks": "Sin enlaces personalizados"
+    },
+    "Projects": {
+        "title": "Proyectos",
+        "subtitle": "Gestiona tus proyectos aquí.",
+        "add": "Agregar Proyecto",
+        "addDescription": "Agrega un nuevo proyecto a tu portafolio.",
+        "create": "Crear Proyecto",
+        "creating": "Creando...",
+        "form": {
+            "title": "Título",
+            "titlePlaceholder": "Título del Proyecto",
+            "description": "Descripción",
+            "descriptionPlaceholder": "Descripción del Proyecto",
+            "techStack": "Tecnologías",
+            "techStackPlaceholder": "React, TypeScript, Node.js",
+            "liveUrl": "URL en vivo",
+            "repoUrl": "URL del repositorio"
+        },
+        "empty": {
+            "title": "Aún no hay proyectos",
+            "description": "Agrega tu primer proyecto para comenzar."
+        },
+        "links": {
+            "live": "Ver",
+            "repo": "Código"
+        },
+        "success": "Proyecto creado",
+        "error": "Error al crear proyecto",
+        "edit": "Editar",
+        "editDescription": "Actualiza la información de tu proyecto",
+        "update": "Actualizar",
+        "updating": "Actualizando...",
+        "updated": "Proyecto actualizado exitosamente"
+    },
+    "Locale": {
+        "english": "Inglés",
+        "spanish": "Español",
+        "changeLanguage": "Cambiar idioma",
+        "changing": "Cambiando idioma..."
+    }
+}

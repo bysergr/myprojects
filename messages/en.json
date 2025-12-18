@@ -1,0 +1,169 @@
+{
+    "HomePage": {
+        "title": "MyProjects",
+        "subtitle": "The high-end portfolio builder for developers.",
+        "getStarted": "Get Started"
+    },
+    "Landing": {
+        "login": "Log In",
+        "signup": "Sign Up",
+        "logout": "Log Out",
+        "dashboard": "Dashboard",
+        "badge": "For developers",
+        "subtitle": "The platform where developers showcase their best projects to the world. Build your professional portfolio and connect with opportunities.",
+        "getStarted": "Get started",
+        "viewProjects": "View projects",
+        "stats": {
+            "developers": "Developers",
+            "projects": "Projects",
+            "views": "Views"
+        },
+        "carousel": {
+            "title": "Featured projects",
+            "subtitle": "Discover the most popular projects from our community",
+            "empty": "No published projects yet. Be the first!",
+            "viewProject": "View project"
+        },
+        "about": {
+            "title": "Your professional portfolio in minutes",
+            "description": "MyProjects is the perfect platform for developers who want to stand out. Showcase your projects, share your code, and build your personal brand as a developer.",
+            "features": {
+                "showcase": {
+                    "title": "Showcase your code",
+                    "description": "Present your projects with detailed descriptions, technologies used, and links to demos and repositories."
+                },
+                "organize": {
+                    "title": "Organize your work",
+                    "description": "Keep all your projects organized in one place with an intuitive and easy-to-use dashboard."
+                },
+                "share": {
+                    "title": "Share globally",
+                    "description": "Get a unique URL for your profile and share it with recruiters, clients, or the community."
+                },
+                "analytics": {
+                    "title": "Analyze your impact",
+                    "description": "Know how many people view your projects, likes, and engagement statistics."
+                }
+            },
+            "cta": "Join hundreds of developers"
+        },
+        "footer": {
+            "madeWith": "Made with",
+            "by": "by",
+            "rights": "All rights reserved."
+        }
+    },
+    "Auth": {
+        "login": "Log In",
+        "signup": "Sign Up",
+        "email": "Email",
+        "password": "Password",
+        "name": "Name",
+        "google": "Continue with Google"
+    },
+    "Dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Welcome to your dashboard.",
+        "projects": "Projects",
+        "profile": "Profile",
+        "analytics": "Analytics"
+    },
+    "DashboardPreview": {
+        "previewMode": "Preview of your public profile",
+        "changeBanner": "Change banner",
+        "editProfile": "Edit profile",
+        "shareProfile": "Share profile",
+        "viewPublic": "View public",
+        "noName": "No name",
+        "noUsernameSet": "No username set",
+        "noBio": "No bio. Add one in your profile.",
+        "noUsername": "Set your username first",
+        "linkCopied": "Link copied!",
+        "copyError": "Error copying link",
+        "loadError": "Error loading data",
+        "uploadBanner": "Upload banner",
+        "uploadBannerDesc": "Choose an image for your banner. Recommended 1500x500px.",
+        "clickToSelect": "Click to select image",
+        "invalidFileType": "Please select an image file",
+        "fileTooLarge": "Image must be less than 10MB",
+        "bannerHint": "Max 10MB. Recommended aspect ratio 3:1 (e.g. 1500x500px)",
+        "bannerUpdated": "Banner updated",
+        "uploadError": "Error uploading banner",
+        "cancel": "Cancel",
+        "uploading": "Uploading...",
+        "saveBanner": "Save banner",
+        "myProjects": "My Projects",
+        "projectsCount": "{count, plural, =0 {No projects} =1 {1 project} other {# projects}}",
+        "addProject": "Add",
+        "noProjects": "You don't have any projects yet",
+        "noProjectsDesc": "Add your first project so it appears on your public profile and recruiters can see your work.",
+        "addFirstProject": "Add my first project",
+        "published": "Published",
+        "draft": "Draft",
+        "viewLive": "View demo",
+        "viewRepo": "View code",
+        "viewProject": "View project"
+    },
+    "Profile": {
+        "title": "Profile",
+        "subtitle": "Edit your profile here.",
+        "username": "Username",
+        "name": "Name",
+        "bio": "Bio",
+        "bioPlaceholder": "Tell us about yourself",
+        "save": "Save changes",
+        "loading": "Loading...",
+        "success": "Profile updated",
+        "error": "Failed to update profile",
+        "loadError": "Failed to load profile",
+        "basicInfo": "Basic Information",
+        "basicInfoDescription": "Update your personal information and bio.",
+        "socialLinks": "Social Links",
+        "socialLinksDescription": "Add your social media links to appear on your public profile.",
+        "website": "Website",
+        "customLinks": "Custom Links",
+        "customLinksDescription": "Add up to {max} additional links",
+        "addLink": "Add",
+        "linkLabel": "Link name",
+        "noCustomLinks": "No custom links"
+    },
+    "Projects": {
+        "title": "Projects",
+        "subtitle": "Manage your projects here.",
+        "add": "Add Project",
+        "addDescription": "Add a new project to your portfolio.",
+        "create": "Create Project",
+        "creating": "Creating...",
+        "form": {
+            "title": "Title",
+            "titlePlaceholder": "Project Title",
+            "description": "Description",
+            "descriptionPlaceholder": "Project Description",
+            "techStack": "Tech Stack",
+            "techStackPlaceholder": "React, TypeScript, Node.js",
+            "liveUrl": "Live URL",
+            "repoUrl": "Repo URL"
+        },
+        "empty": {
+            "title": "No projects yet",
+            "description": "Add your first project to get started."
+        },
+        "links": {
+            "live": "Live",
+            "repo": "Repo"
+        },
+        "success": "Project created",
+        "error": "Failed to create project",
+        "edit": "Edit",
+        "editDescription": "Update your project information",
+        "update": "Update",
+        "updating": "Updating...",
+        "updated": "Project updated successfully"
+    },
+    "Locale": {
+        "english": "English",
+        "spanish": "Spanish",
+        "changeLanguage": "Change language",
+        "changing": "Changing language..."
+    }
+}
