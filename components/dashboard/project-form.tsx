@@ -38,10 +38,10 @@ interface Project {
   id: string;
   title: string;
   description: string | null;
-  techStack: string[];
-  liveUrl: string | null;
-  repoUrl: string | null;
-  imageUrl: string | null;
+  techStack?: string[];
+  liveUrl?: string | null;
+  repoUrl?: string | null;
+  imageUrl?: string | null;
 }
 
 export function ProjectForm({

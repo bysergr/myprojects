@@ -27,7 +27,7 @@ export async function PUT(
     // Verify ownership
     const existing = await prisma.project.findUnique({
       where: { id },
-      select: { userId: true, title: true },
+      select: { userId: true, title: true, slug: true },
     });
 
     if (!existing || existing.userId !== uid) {

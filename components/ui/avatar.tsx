@@ -27,7 +27,8 @@ function AvatarImage({
   ...props
 }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
   // Use proxied URL to avoid CORS issues with Firebase Storage
-  const proxiedSrc = getProxiedImageUrl(src);
+  // Only process string URLs, Blob objects are handled directly by the browser
+  const proxiedSrc = typeof src === "string" ? getProxiedImageUrl(src) : src;
 
   return (
     <AvatarPrimitive.Image
