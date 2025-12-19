@@ -2,22 +2,33 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Heart,
-  ExternalLink,
-  Github,
-  Loader2,
-  ChevronRight,
-  Home,
-} from "lucide-react";
+import { Heart, ExternalLink, Github, Home } from "lucide-react";
 import { notFound } from "next/navigation";
 import { CommentsSection } from "@/components/project/comments-section";
 import { getProxiedImageUrl } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "@/i18n/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useTranslations } from "next-intl";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 interface ProjectDetailProps {
   params: Promise<{ username: string; slug: string; locale: string }>;
@@ -45,17 +56,16 @@ interface Project {
 
 export default function ProjectDetailPage({ params }: ProjectDetailProps) {
   const { user } = useAuth();
+  const t = useTranslations("ProjectDetail");
   const [project, setProject] = useState<Project | null>(null);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [loading, setLoading] = useState(true);
-
-  const [locale, setLocale] = useState<string>("en");
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
 
   useEffect(() => {
     async function loadProject() {
-      const { username, slug, locale: localeParam } = await params;
-      setLocale(localeParam);
+      const { username, slug } = await params;
 
       // Fetch project
       const res = await fetch(`/api/public/projects/${username}/${slug}`);
@@ -88,7 +98,12 @@ export default function ProjectDetailPage({ params }: ProjectDetailProps) {
   }, [params, user]);
 
   async function handleLike() {
-    if (!user || !project) return;
+    if (!project) return;
+
+    if (!user) {
+      setLoginDialogOpen(true);
+      return;
+    }
 
     const token = await user.getIdToken();
     const res = await fetch(`/api/projects/${project.id}/like`, {
@@ -152,61 +167,42 @@ export default function ProjectDetailPage({ params }: ProjectDetailProps) {
       <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16">
         <div className="space-y-8 md:space-y-10">
           {/* Breadcrumb */}
-          <nav
-            className="flex items-center gap-2 text-sm px-2 pb-4"
-            aria-label="Breadcrumb"
-          >
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors font-medium"
-            >
-              <Home className="h-4 w-4" />
-              <span>Home</span>
-            </Link>
-            {project.user.username && (
-              <>
-                <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
-                <Link
-                  href={`/${project.user.username}`}
-                  className="text-muted-foreground hover:text-primary transition-colors truncate max-w-[200px] font-medium"
-                >
-                  {project.user.name || project.user.username}
-                </Link>
-              </>
-            )}
-            <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
-            <span
-              className="text-foreground font-semibold truncate max-w-[300px]"
-              title={project.title}
-            >
-              {project.title}
-            </span>
-          </nav>
-
-          {/* Author Info */}
-          {project.user.username && (
-            <div className="flex items-center gap-3 pb-6r px-2">
-              <Link href={`/${project.user.username}`}>
-                <Avatar className="h-12 w-12 cursor-pointer hover:ring-2 ring-primary transition-all">
-                  <AvatarImage src={project.user.avatarUrl || ""} />
-                  <AvatarFallback>
-                    {project.user.name?.[0] ||
-                      project.user.username?.[0] ||
-                      "?"}
-                  </AvatarFallback>
-                </Avatar>
-              </Link>
-              <div className="flex-1">
-                <Link
-                  href={`/${project.user.username}`}
-                  className="text-sm font-semibold hover:text-primary transition-colors block"
-                >
-                  {project.user.name || project.user.username || "Anonymous"}
-                </Link>
-                <p className="text-xs text-muted-foreground">Project creator</p>
-              </div>
-            </div>
-          )}
+          <div className="flex items-center justify-between gap-2 px-2 pb-4">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/" className="flex items-center gap-1.5">
+                      <Home className="h-4 w-4" />
+                      {t("home")}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                {project.user.username && (
+                  <>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link
+                          href={`/${project.user.username}`}
+                          className="truncate max-w-[200px]"
+                        >
+                          {project.user.name || project.user.username}
+                        </Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </>
+                )}
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="truncate max-w-[300px]">
+                    {project.title}
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <LocaleSwitcher />
+          </div>
 
           {/* Header */}
           <div className="space-y-4 px-2">
@@ -214,9 +210,11 @@ export default function ProjectDetailPage({ params }: ProjectDetailProps) {
               {project.title}
             </h1>
             {project.description && (
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">
-                {project.description}
-              </p>
+              <div className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl prose prose-lg dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-code:text-foreground prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {project.description}
+                </ReactMarkdown>
+              </div>
             )}
             {/* Tech Stack */}
             {project.techStack.length > 0 && (
@@ -274,18 +272,18 @@ export default function ProjectDetailPage({ params }: ProjectDetailProps) {
           )}
 
           {/* Actions Container */}
-          <div className="px-2">
+          <div className="px-2 flex flex-wrap justify-between items-stretch gap-3">
             {/* Actions */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               {project.liveUrl && (
                 <Button
                   asChild
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all hover:scale-105 font-semibold px-6"
+                  size="default"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all hover:scale-105 font-semibold px-4 sm:px-6 text-sm sm:text-base"
                 >
                   <a href={project.liveUrl} target="_blank" rel="noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
-                    Live Demo
+                    {t("liveDemo")}
                   </a>
                 </Button>
               )}
@@ -293,56 +291,55 @@ export default function ProjectDetailPage({ params }: ProjectDetailProps) {
                 <Button
                   variant="outline"
                   asChild
-                  size="lg"
-                  className="border-2 shadow-md hover:shadow-lg transition-all hover:scale-105 font-semibold px-6 bg-background hover:bg-muted/50"
+                  size="default"
+                  className="border-2 shadow-md hover:shadow-lg transition-all hover:scale-105 font-semibold px-4 sm:px-6 bg-background hover:bg-muted/50 text-sm sm:text-base"
                 >
                   <a href={project.repoUrl} target="_blank" rel="noreferrer">
                     <Github className="mr-2 h-4 w-4" />
-                    Repository
+                    {t("repository")}
                   </a>
                 </Button>
               )}
             </div>
+            <Button
+              variant={liked ? "default" : "outline"}
+              onClick={handleLike}
+              size="default"
+              className={`w-fit sm:w-auto font-semibold px-4 sm:px-6 text-sm sm:text-base transition-all ${
+                liked
+                  ? "bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-xl hover:scale-105"
+                  : "border-2 shadow-md hover:shadow-lg hover:scale-105 hover:bg-red-50 dark:hover:bg-red-950/20 hover:border-red-500/50"
+              }`}
+            >
+              <Heart
+                className={`mr-2 h-4 w-4 ${liked ? "fill-current" : ""}`}
+              />
+              ({likeCount}) {liked ? t("liked") : t("like")}
+            </Button>
           </div>
 
-          {/* Stats & Like */}
-          <Card className="border-2 shadow-xl bg-card/50 backdrop-blur-sm mx-2 overflow-hidden">
-            <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 md:p-8">
-              <div className="flex flex-wrap items-center gap-8">
-                <div className="flex items-center gap-4 group">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 group-hover:border-red-500/40 transition-colors">
-                    <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-foreground">
-                      {likeCount}
-                    </p>
-                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                      likes
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {user && (
+          {/* Login Dialog */}
+          <Dialog open={loginDialogOpen} onOpenChange={setLoginDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{t("loginToLike.title")}</DialogTitle>
+                <DialogDescription>
+                  {t("loginToLike.description")}
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
                 <Button
-                  variant={liked ? "default" : "outline"}
-                  onClick={handleLike}
-                  size="lg"
-                  className={`w-full sm:w-auto font-semibold px-6 transition-all ${
-                    liked
-                      ? "bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-xl hover:scale-105"
-                      : "border-2 shadow-md hover:shadow-lg hover:scale-105 hover:bg-red-50 dark:hover:bg-red-950/20 hover:border-red-500/50"
-                  }`}
+                  variant="outline"
+                  onClick={() => setLoginDialogOpen(false)}
                 >
-                  <Heart
-                    className={`mr-2 h-4 w-4 ${liked ? "fill-current" : ""}`}
-                  />
-                  {liked ? "Liked" : "Like"}
+                  {t("cancel")}
                 </Button>
-              )}
-            </CardContent>
-          </Card>
+                <Button asChild>
+                  <Link href="/login">{t("login")}</Link>
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           {/* Comments */}
           <div className="pt-6 px-2">

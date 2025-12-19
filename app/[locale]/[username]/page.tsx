@@ -19,10 +19,13 @@ import {
   Eye,
   ExternalLink,
   Code2,
+  MessageCircle,
 } from "lucide-react";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Link as I18nLink } from "@/i18n/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type CustomLink = {
   label: string;
@@ -119,7 +122,7 @@ export default async function PublicProfilePage({
         orderBy: { createdAt: "desc" },
         include: {
           _count: {
-            select: { likes: true },
+            select: { likes: true, comments: true },
           },
         },
       },
@@ -144,96 +147,102 @@ export default async function PublicProfilePage({
             className="h-full w-full object-cover"
           />
         )}
-        <div className="absolute -bottom-16 left-8">
-          <Avatar className="h-32 w-32 border-4 border-background">
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-8 pb-8">
+        <div className="flex flex-col sm:flex-row items-start gap-6 -mt-16 sm:-mt-16 relative z-10">
+          <Avatar className="h-32 w-32 sm:h-36 sm:w-36 border-4 border-background shrink-0">
             <AvatarImage src={user.avatarUrl || ""} />
             <AvatarFallback>
               {user.name?.[0] || user.username?.[0]}
             </AvatarFallback>
           </Avatar>
+          <div className="flex-1 pt-2 sm:pt-20 min-w-0 w-full">
+            <h1 className="text-4xl font-bold mb-2">
+              {user.name || user.username}
+            </h1>
+            {user.name && (
+              <p className="text-muted-foreground">@{user.username}</p>
+            )}
+            {user.bio && <p className="mt-4 max-w-2xl">{user.bio}</p>}
+
+            {/* Social Links */}
+            {(() => {
+              const customLinks = (userWithCustomLinks.customLinks ||
+                []) as CustomLink[];
+              const hasLinks =
+                user.githubUrl ||
+                user.linkedinUrl ||
+                user.twitterUrl ||
+                user.websiteUrl ||
+                customLinks.length > 0;
+
+              if (!hasLinks) return null;
+
+              return (
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {user.githubUrl && (
+                    <a
+                      href={user.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
+                    >
+                      <Github className="h-4 w-4" />
+                      GitHub
+                    </a>
+                  )}
+                  {user.linkedinUrl && (
+                    <a
+                      href={user.linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
+                    >
+                      <Linkedin className="h-4 w-4" />
+                      LinkedIn
+                    </a>
+                  )}
+                  {user.twitterUrl && (
+                    <a
+                      href={user.twitterUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
+                    >
+                      <Twitter className="h-4 w-4" />
+                      Twitter
+                    </a>
+                  )}
+                  {user.websiteUrl && (
+                    <a
+                      href={user.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
+                    >
+                      <Globe className="h-4 w-4" />
+                      Website
+                    </a>
+                  )}
+                  {/* Custom Links */}
+                  {customLinks.map((link) => (
+                    <a
+                      key={`${link.url}-${link.label}`}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
+                    >
+                      <Link className="h-4 w-4" />
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              );
+            })()}
+          </div>
         </div>
-      </div>
-
-      <div className="container mx-auto px-8 pt-20 pb-8">
-        <h1 className="text-3xl font-bold">{user.name}</h1>
-        <p className="text-muted-foreground">@{user.username}</p>
-        {user.bio && <p className="mt-4 max-w-2xl">{user.bio}</p>}
-
-        {/* Social Links */}
-        {(() => {
-          const customLinks = (userWithCustomLinks.customLinks ||
-            []) as CustomLink[];
-          const hasLinks =
-            user.githubUrl ||
-            user.linkedinUrl ||
-            user.twitterUrl ||
-            user.websiteUrl ||
-            customLinks.length > 0;
-
-          if (!hasLinks) return null;
-
-          return (
-            <div className="mt-4 flex flex-wrap gap-3">
-              {user.githubUrl && (
-                <a
-                  href={user.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
-                >
-                  <Github className="h-4 w-4" />
-                  GitHub
-                </a>
-              )}
-              {user.linkedinUrl && (
-                <a
-                  href={user.linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
-                >
-                  <Linkedin className="h-4 w-4" />
-                  LinkedIn
-                </a>
-              )}
-              {user.twitterUrl && (
-                <a
-                  href={user.twitterUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
-                >
-                  <Twitter className="h-4 w-4" />
-                  Twitter
-                </a>
-              )}
-              {user.websiteUrl && (
-                <a
-                  href={user.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
-                >
-                  <Globe className="h-4 w-4" />
-                  Website
-                </a>
-              )}
-              {/* Custom Links */}
-              {customLinks.map((link) => (
-                <a
-                  key={`${link.url}-${link.label}`}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors text-sm font-medium"
-                >
-                  <Link className="h-4 w-4" />
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          );
-        })()}
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {user.projects.map((project) => (
@@ -242,35 +251,38 @@ export default async function PublicProfilePage({
               className="group overflow-hidden hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 flex flex-col h-full"
             >
               {/* Project image */}
-              <div className="relative h-40 bg-muted overflow-hidden">
-                {project.imageUrl ? (
-                  <img
-                    src={getProxiedImageUrl(project.imageUrl)}
-                    alt={project.title}
-                    className="w-full h-full object-cover border-b border-border transition-transform duration-300 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-                    <span className="text-4xl font-bold text-primary/30">
-                      {project.title.charAt(0)}
-                    </span>
-                  </div>
-                )}
-
-                {/* Published badge */}
-                <div className="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium bg-primary/90 text-primary-foreground">
-                  Publicado
+              <I18nLink href={`/${username}/${project.slug}`}>
+                <div className="relative h-40 bg-muted overflow-hidden cursor-pointer">
+                  {project.imageUrl ? (
+                    <img
+                      src={getProxiedImageUrl(project.imageUrl)}
+                      alt={project.title}
+                      className="w-full h-full object-cover border-b border-border transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
+                      <span className="text-4xl font-bold text-primary/30">
+                        {project.title.charAt(0)}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              </div>
+              </I18nLink>
 
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg truncate group-hover:text-primary transition-colors">
-                  {project.title}
-                </CardTitle>
+                <I18nLink href={`/${username}/${project.slug}`}>
+                  <CardTitle className="text-lg break-words group-hover:text-primary transition-colors cursor-pointer">
+                    {project.title}
+                  </CardTitle>
+                </I18nLink>
                 {project.description && (
-                  <CardDescription className="line-clamp-2">
-                    {project.description}
-                  </CardDescription>
+                  <div className="text-sm text-muted-foreground break-words prose prose-sm dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-code:text-foreground prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {project.description.length > 150
+                        ? `${project.description.substring(0, 150)}...`
+                        : project.description}
+                    </ReactMarkdown>
+                  </div>
                 )}
               </CardHeader>
 
@@ -305,6 +317,12 @@ export default async function PublicProfilePage({
                       <div className="flex items-center gap-1">
                         <Eye className="w-4 h-4" />
                         <span className="text-xs">{project.views}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <MessageCircle className="w-4 h-4" />
+                        <span className="text-xs">
+                          {project._count.comments}
+                        </span>
                       </div>
                     </div>
 

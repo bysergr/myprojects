@@ -165,5 +165,34 @@
         "spanish": "Español",
         "changeLanguage": "Cambiar idioma",
         "changing": "Cambiando idioma..."
+    },
+    "ProjectDetail": {
+        "home": "Inicio",
+        "liveDemo": "Demo en vivo",
+        "repository": "Repositorio",
+        "like": "Me gusta",
+        "liked": "Me gusta",
+        "loginToLike": {
+            "title": "Inicia sesión para dar like",
+            "description": "Necesitas iniciar sesión para poder dar like a este proyecto."
+        },
+        "cancel": "Cancelar",
+        "login": "Iniciar sesión"
+    },
+    "Comments": {
+        "title": "Comentarios",
+        "placeholder": "Agrega un comentario...",
+        "loginToComment": {
+            "title": "Inicia sesión para comentar",
+            "description": "Necesitas iniciar sesión para poder agregar comentarios a este proyecto."
+        },
+        "cancel": "Cancelar",
+        "login": "Iniciar sesión",
+        "anonymous": "Anónimo",
+        "noComments": "Aún no hay comentarios. ¡Sé el primero en comentar!",
+        "commentAdded": "Comentario agregado",
+        "commentDeleted": "Comentario eliminado",
+        "addError": "Error al agregar comentario",
+        "deleteError": "Error al eliminar comentario"
     }
 }

@@ -165,5 +165,34 @@
         "spanish": "Spanish",
         "changeLanguage": "Change language",
         "changing": "Changing language..."
+    },
+    "ProjectDetail": {
+        "home": "Home",
+        "liveDemo": "Live Demo",
+        "repository": "Repository",
+        "like": "Like",
+        "liked": "Liked",
+        "loginToLike": {
+            "title": "Log in to like",
+            "description": "You need to log in to like this project."
+        },
+        "cancel": "Cancel",
+        "login": "Log in"
+    },
+    "Comments": {
+        "title": "Comments",
+        "placeholder": "Add a comment...",
+        "loginToComment": {
+            "title": "Log in to comment",
+            "description": "You need to log in to add comments to this project."
+        },
+        "cancel": "Cancel",
+        "login": "Log in",
+        "anonymous": "Anonymous",
+        "noComments": "No comments yet. Be the first to comment!",
+        "commentAdded": "Comment added",
+        "commentDeleted": "Comment deleted",
+        "addError": "Failed to add comment",
+        "deleteError": "Failed to delete comment"
     }
 }
