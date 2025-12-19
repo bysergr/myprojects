@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "MyProjects",
   description: "The high-end portfolio builder for developers.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default async function LocaleLayout({
