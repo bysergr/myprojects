@@ -24,3 +24,41 @@ export function ensureUniqueSlug(baseSlug: string, existingSlugs: string[]): str
   
   return slug;
 }
+
+/**
+ * Generate a username from a name (lowercase, separated by hyphens)
+ */
+export function generateUsernameFromName(name: string): string {
+  return generateSlug(name);
+}
+
+/**
+ * Get a random lowercase letter
+ */
+function getRandomLetter(): string {
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  return letters[Math.floor(Math.random() * letters.length)];
+}
+
+/**
+ * Generate a unique username by checking against existing usernames
+ * If the base username exists, appends random letters until unique
+ */
+export async function generateUniqueUsername(
+  baseUsername: string,
+  checkExists: (username: string) => Promise<boolean>
+): Promise<string> {
+  let username = baseUsername;
+  
+  // If base username is empty or too short, use a default
+  if (!username || username.length < 3) {
+    username = 'user';
+  }
+  
+  // Check if username exists, if so append random letters
+  while (await checkExists(username)) {
+    username = `${username}${getRandomLetter()}`;
+  }
+  
+  return username;
+}

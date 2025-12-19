@@ -24,6 +24,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { getProjectImagePath } from "@/lib/firebase-storage";
 import { getProxiedImageUrl } from "@/lib/utils";
@@ -298,36 +299,59 @@ export function GitHubImportEdit({ repo, onSuccess, onCancel }: GitHubImportEdit
       {/* Modal de carga */}
       <Dialog open={isProcessing} onOpenChange={() => {}}>
         <DialogContent 
-          className="sm:max-w-md" 
+          className="sm:max-w-lg" 
+          style={{ zIndex: 100 }}
           showCloseButton={false}
           onInteractOutside={(e) => e.preventDefault()} 
           onEscapeKeyDown={(e) => e.preventDefault()}
         >
-          <div className="flex flex-col items-center justify-center py-8">
-            <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-            <DialogDescription className="text-center">
+          <DialogTitle className="sr-only">
+            {generatingAI ? "Generando detalles del proyecto con IA" : "Extrayendo imagen del sitio web"}
+          </DialogTitle>
+          <div className="flex flex-col items-center justify-center py-12 px-6">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-primary/10 rounded-full blur-xl"></div>
+              <Loader2 className="h-16 w-16 animate-spin text-primary relative z-10" />
+            </div>
+            <div className="text-center space-y-3">
               {generatingAI && (
                 <>
-                  <p className="font-semibold mb-2">🤖 Generating project details with AI...</p>
-                  <p className="text-sm text-muted-foreground">
-                    Extracting title, description, technologies, and live URL from repository
+                  <h3 className="text-lg font-semibold text-foreground">
+                    🤖 Generando detalles del proyecto con IA
+                  </h3>
+                  <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
+                    Extrayendo título, descripción, tecnologías y URL en vivo del repositorio
                   </p>
+                  <div className="flex items-center justify-center gap-1 pt-2">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                  </div>
                 </>
               )}
               {extractingOG && !generatingAI && (
                 <>
-                  <p className="font-semibold mb-2">🖼️ Extracting image from website...</p>
-                  <p className="text-sm text-muted-foreground">
-                    Fetching Open Graph image from the live URL
+                  <h3 className="text-lg font-semibold text-foreground">
+                    🖼️ Extrayendo imagen del sitio web
+                  </h3>
+                  <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
+                    Obteniendo imagen de Open Graph desde la URL en vivo
                   </p>
+                  <div className="flex items-center justify-center gap-1 pt-2">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                  </div>
                 </>
               )}
-            </DialogDescription>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      {/* Formulario de edición - oculto cuando está procesando */}
+      <div className={isProcessing ? "hidden" : ""}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         {/* Image Upload */}
         <div className="space-y-2">
           <Label>Project Image (Optional)</Label>
@@ -485,6 +509,7 @@ export function GitHubImportEdit({ repo, onSuccess, onCancel }: GitHubImportEdit
           </Button>
         </div>
       </form>
+      </div>
     </Form>
   );
 }

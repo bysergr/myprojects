@@ -1,5 +1,3 @@
-import { SignupForm } from "@/components/auth/signup-form";
-import { Navbar } from "@/components/landing";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 
@@ -14,12 +12,12 @@ export async function generateMetadata({
   const host = headersList.get("host");
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
   const baseUrl = `${protocol}://${host}`;
-  const pageUrl = `${baseUrl}/${locale}/signup`;
+  const pageUrl = `${baseUrl}/${locale}/dashboard/profile`;
 
-  const title = locale === "es" ? "Registrarse" : "Sign Up";
+  const title = locale === "es" ? "Perfil" : "Profile";
   const description = locale === "es"
-    ? "Crea tu cuenta en MyProjects y comienza a construir tu portafolio profesional de desarrollador."
-    : "Create your MyProjects account and start building your professional developer portfolio.";
+    ? "Edita tu perfil y configura tu información personal en MyProjects."
+    : "Edit your profile and configure your personal information on MyProjects.";
 
   return {
     title: `${title} | MyProjects`,
@@ -47,13 +45,11 @@ export async function generateMetadata({
   };
 }
 
-export default function SignupPage() {
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="flex min-h-screen w-full items-center justify-center px-4 pt-16">
-        <SignupForm />
-      </div>
-    </div>
-  );
+export default function ProfileLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
 }
+

@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { AuthProvider } from "@/components/auth-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { headers } from "next/headers";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -16,13 +17,48 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "MyProjects",
-  description: "The high-end portfolio builder for developers.",
-  icons: {
-    icon: "/favicon.png",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  const headersList = await headers();
+  const host = headersList.get("host");
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  const baseUrl = `${protocol}://${host}`;
+
+  const title = "MyProjects";
+  const description =
+    locale === "es"
+      ? "El constructor de portafolios de alta gama para desarrolladores. Muestra tus proyectos, comparte tu código y construye tu marca personal."
+      : "The high-end portfolio builder for developers. Showcase your projects, share your code, and build your personal brand.";
+
+  return {
+    title: {
+      default: title,
+      template: `%s | ${title}`,
+    },
+    description,
+    icons: {
+      icon: "/favicon.png",
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/${locale}`,
+      siteName: title,
+      locale: locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,

@@ -1,5 +1,3 @@
-import { SignupForm } from "@/components/auth/signup-form";
-import { Navbar } from "@/components/landing";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 
@@ -14,12 +12,12 @@ export async function generateMetadata({
   const host = headersList.get("host");
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
   const baseUrl = `${protocol}://${host}`;
-  const pageUrl = `${baseUrl}/${locale}/signup`;
+  const pageUrl = `${baseUrl}/${locale}/dashboard/projects`;
 
-  const title = locale === "es" ? "Registrarse" : "Sign Up";
+  const title = locale === "es" ? "Proyectos" : "Projects";
   const description = locale === "es"
-    ? "Crea tu cuenta en MyProjects y comienza a construir tu portafolio profesional de desarrollador."
-    : "Create your MyProjects account and start building your professional developer portfolio.";
+    ? "Gestiona tus proyectos y crea nuevos para tu portafolio en MyProjects."
+    : "Manage your projects and create new ones for your portfolio on MyProjects.";
 
   return {
     title: `${title} | MyProjects`,
@@ -47,13 +45,11 @@ export async function generateMetadata({
   };
 }
 
-export default function SignupPage() {
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="flex min-h-screen w-full items-center justify-center px-4 pt-16">
-        <SignupForm />
-      </div>
-    </div>
-  );
+export default function ProjectsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
 }
+

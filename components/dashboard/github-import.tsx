@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,6 +32,24 @@ interface GitHubRepo {
   updated_at: string;
 }
 
+// Función para extraer el username de GitHub de una URL
+function extractGitHubUsername(githubUrl: string | null | undefined): string | null {
+  if (!githubUrl) return null;
+  
+  try {
+    const url = new URL(githubUrl);
+    // Extraer el pathname y eliminar el slash inicial
+    const pathname = url.pathname.replace(/^\//, "");
+    // Obtener la primera parte del path (el username)
+    const username = pathname.split("/")[0];
+    return username || null;
+  } catch {
+    // Si no es una URL válida, intentar extraer el username directamente
+    const match = githubUrl.match(/github\.com\/([^\/\s]+)/);
+    return match ? match[1] : null;
+  }
+}
+
 export function GitHubImport({ onSuccess }: { onSuccess?: () => void }) {
   const t = useTranslations("Projects");
   const { user } = useAuth();
@@ -45,6 +63,37 @@ export function GitHubImport({ onSuccess }: { onSuccess?: () => void }) {
   const [hasSearched, setHasSearched] = useState(false);
   const [editingRepo, setEditingRepo] = useState<GitHubRepo | null>(null);
   const [importedRepoUrls, setImportedRepoUrls] = useState<Set<string>>(new Set());
+
+  // Obtener el perfil del usuario y hacer prefill del username si tiene githubUrl
+  useEffect(() => {
+    async function loadUserProfile() {
+      if (!user) return;
+      
+      try {
+        const token = await user.getIdToken();
+        const res = await fetch("/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          if (data.githubUrl) {
+            const extractedUsername = extractGitHubUsername(data.githubUrl);
+            if (extractedUsername) {
+              setUsername(extractedUsername);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error loading user profile:", error);
+        // No mostrar error al usuario, es opcional
+      }
+    }
+
+    loadUserProfile();
+  }, [user]);
 
   async function fetchRepos() {
     if (!username.trim()) {

@@ -13,9 +13,14 @@ interface AvatarUploadProps {
   onUploadComplete: (url: string) => void;
 }
 
-export function AvatarUpload({ currentAvatarUrl, onUploadComplete }: AvatarUploadProps) {
+export function AvatarUpload({
+  currentAvatarUrl,
+  onUploadComplete,
+}: AvatarUploadProps) {
   const { user } = useAuth();
-  const [preview, setPreview] = useState<string | null>(currentAvatarUrl || null);
+  const [preview, setPreview] = useState<string | null>(
+    currentAvatarUrl || null
+  );
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,29 +104,35 @@ export function AvatarUpload({ currentAvatarUrl, onUploadComplete }: AvatarUploa
 
       // 30 second timeout
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error("Upload timeout. Please try again.")), 30000);
+        setTimeout(
+          () => reject(new Error("Upload timeout. Please try again.")),
+          30000
+        );
       });
 
       const url = await Promise.race([uploadPromise, timeoutPromise]);
-      
+
       // Update preview with the actual URL from server
       setPreview(url);
-      
+
       // Notify parent component
       onUploadComplete(url);
-      
+
       // Dispatch custom event to update other components (like dashboard)
-      window.dispatchEvent(new CustomEvent('avatarUpdated', { detail: { avatarUrl: url } }));
-      
+      window.dispatchEvent(
+        new CustomEvent("avatarUpdated", { detail: { avatarUrl: url } })
+      );
+
       toast.success("Avatar updated");
-      
+
       // Reset file input after successful upload
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     } catch (error) {
       console.error("Avatar upload error:", error);
-      const errorMessage = error instanceof Error ? error.message : "Failed to upload avatar";
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to upload avatar";
       toast.error(errorMessage);
       setPreview(currentAvatarUrl || null);
       // Reset file input
@@ -135,7 +146,7 @@ export function AvatarUpload({ currentAvatarUrl, onUploadComplete }: AvatarUploa
 
   return (
     <div className="flex items-center gap-4">
-      <Avatar className="h-24 w-24">
+      <Avatar className="h-28 w-28">
         <AvatarImage src={preview || ""} />
         <AvatarFallback>{user?.displayName?.[0] || "?"}</AvatarFallback>
       </Avatar>

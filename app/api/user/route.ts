@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebase-admin";
 import { prisma } from "@/lib/prisma";
+import { generateUsernameFromName, generateUniqueUsername } from "@/lib/slug";
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("Authorization");
@@ -23,13 +24,50 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user) {
+      // Generate username from name
+      const userName = decodedToken.name || decodedToken.email?.split("@")[0] || "user";
+      const baseUsername = generateUsernameFromName(userName);
+      
+      // Generate unique username
+      const username = await generateUniqueUsername(
+        baseUsername,
+        async (username) => {
+          const existing = await prisma.user.findUnique({
+            where: { username },
+          });
+          return !!existing;
+        }
+      );
+      
       user = await prisma.user.create({
         data: {
           id: uid,
           email: decodedToken.email!,
-          name: decodedToken.name || decodedToken.email?.split("@")[0],
+          name: userName,
+          username,
           avatarUrl: decodedToken.picture,
         },
+      });
+    } else if (!user.username) {
+      // If user exists but doesn't have username, generate one
+      const userName = user.name || decodedToken.name || decodedToken.email?.split("@")[0] || "user";
+      const baseUsername = generateUsernameFromName(userName);
+      
+      // Generate unique username
+      const username = await generateUniqueUsername(
+        baseUsername,
+        async (username) => {
+          const existing = await prisma.user.findUnique({
+            where: { username },
+          });
+          return !!existing;
+        }
+      );
+      
+      // Update user with generated username
+      user = await prisma.user.update({
+        where: { id: uid },
+        data: { username },
       });
     }
 
@@ -58,7 +96,10 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Check username uniqueness if provided
-    if (body.username) {
+    if (body.username !== undefined) {
+      if (!body.username || body.username.trim().length < 3) {
+        return NextResponse.json({ error: "Username must be at least 3 characters" }, { status: 400 });
+      }
       const existing = await prisma.user.findUnique({ where: { username: body.username } });
       if (existing && existing.id !== uid) {
         return NextResponse.json({ error: "Username taken" }, { status: 400 });
@@ -66,7 +107,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const updateData: any = {};
-    if (body.username !== undefined) updateData.username = body.username;
+    if (body.username !== undefined) updateData.username = body.username.trim();
     if (body.name !== undefined) updateData.name = body.name;
     if (body.bio !== undefined) updateData.bio = body.bio;
     if (body.avatarUrl !== undefined) {

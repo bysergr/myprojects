@@ -36,7 +36,7 @@ import {
 import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
-  username: z.string().min(3).optional().or(z.literal("")),
+  username: z.string().min(3, "Username must be at least 3 characters"),
   name: z.string().min(2),
   bio: z.string().optional(),
   githubUrl: z.string().url().optional().or(z.literal("")),
