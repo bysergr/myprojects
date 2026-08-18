@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node.js 18+ installed
+- Node.js 20.9+ installed
 - PostgreSQL database
 - Firebase account
 - Git
@@ -12,7 +12,7 @@
 ## 1. Clone & Install
 
 ```bash
-cd projects-nodi
+cd myprojects
 npm install
 ```
 
